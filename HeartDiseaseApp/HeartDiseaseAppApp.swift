@@ -11,7 +11,8 @@ import SwiftUI
 struct HeartDiseaseAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
+                .environmentObject(MessageObs())
         }
     }
 }
