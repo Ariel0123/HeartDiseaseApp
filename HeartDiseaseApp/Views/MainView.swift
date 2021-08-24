@@ -89,42 +89,39 @@ struct MainView: View {
             
             HStack{
                 
+          
+                
                 Button(action: {
-                    
                     do{
                        try getResult()
                     }catch{
                         print("error")
                     }
-                    
-                    
                 }, label: {
-                    Text("Process")
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        .padding()
-                })
-                .frame(width: 160)
-                .background(
-                    RoundedRectangle(cornerRadius: 25.0)
-                        .foregroundColor(Color.blue)
-                )
-                
+                        Text("Clear fields")
+                            .frame(width: 150, height: 40, alignment: .center)
+
+                }).background(Color.blue)
+                .foregroundColor(.white)
+                .font(.headline)
+                .cornerRadius(25)
                 
                 
                 Spacer()
                 
-                Button(action: {self.clearFields()}, label: {
-                    Text("Clear fields")
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        .padding()
-                })
-                .frame(width: 160)
-                .background(
-                    RoundedRectangle(cornerRadius: 25.0)
-                        .foregroundColor(Color.yellow)
-                )
+
+                
+                
+                Button(action: {
+                    self.clearFields()
+                }, label: {
+                        Text("Clear fields")
+                            .frame(width: 150, height: 40, alignment: .center)
+
+                }).background(Color.orange)
+                .foregroundColor(.white)
+                .font(.headline)
+                .cornerRadius(25)
                 
             }
             .padding()
