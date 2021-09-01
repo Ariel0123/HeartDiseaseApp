@@ -98,7 +98,7 @@ struct MainView: View {
                         print("error")
                     }
                 }, label: {
-                        Text("Clear fields")
+                        Text("Predict")
                             .frame(width: 150, height: 40, alignment: .center)
 
                 }).background(Color.blue)
