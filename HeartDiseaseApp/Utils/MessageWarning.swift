@@ -8,7 +8,7 @@
 import Foundation
 
 
-enum MessageWarning: Error, LocalizedError {
+enum MessageWarning: Error {
     case age
     case sex
     case cp
@@ -22,35 +22,39 @@ enum MessageWarning: Error, LocalizedError {
     case slope
     case ca
     case thal
+    case errorModel
     
     var message: String {
         switch self {
         case .age:
-            return NSLocalizedString("The age field is empty or is an invalid input", comment: "")
+            return "The age field is empty or is an invalid input"
         case .sex:
-            return NSLocalizedString("The sex field is empty", comment: "")
+            return "The sex field is empty"
         case .cp:
-            return NSLocalizedString("The cp field is empty or is an invalid input", comment: "")
+            return "The cp field is empty or is an invalid input"
         case .trestbps:
-            return NSLocalizedString("The trestbps field is empty or is an invalid input", comment: "")
+            return "The trestbps field is empty or is an invalid input"
         case .chol:
-            return NSLocalizedString("The chol field is empty or is an invalid input", comment: "")
+            return "The chol field is empty or is an invalid input"
         case .fbs:
-            return NSLocalizedString("The fbs field is empty or is an invalid input", comment: "")
+            return "The fbs field is empty or is an invalid input"
         case .restecg:
-            return NSLocalizedString("The restecg field is empty or is an invalid input", comment: "")
+            return "The restecg field is empty or is an invalid input"
         case .thalach:
-            return NSLocalizedString("The thalach field is empty or is an invalid input", comment: "")
+            return "The thalach field is empty or is an invalid input"
         case .exang:
-            return NSLocalizedString("The exang field is empty or is an invalid input", comment: "")
+            return "The exang field is empty or is an invalid input"
         case .oldpeak:
-            return NSLocalizedString("The oldpeak field is empty or is an invalid input", comment: "")
+            return "The oldpeak field is empty or is an invalid input"
         case .slope:
-            return NSLocalizedString("The slope field is empty or is an invalid input", comment: "")
+            return "The slope field is empty or is an invalid input"
         case .ca:
-            return NSLocalizedString("The ca field is empty or is an invalid input", comment: "")
+            return "The ca field is empty or is an invalid input"
         case .thal:
-            return NSLocalizedString("The thal field is empty or is an invalid input", comment: "")
+            return "The thal field is empty or is an invalid input"
+        case .errorModel:
+            return "Prediction error"
+
         
         
     }
@@ -65,6 +69,6 @@ struct MessageModel: Identifiable {
 }
 
 
-class MessageObs: ObservableObject{
+class MessageService: ObservableObject{
     @Published var msg: MessageModel? = nil
 }

@@ -9,9 +9,10 @@ import SwiftUI
 import CoreML
 
 struct MainView: View {
-    @EnvironmentObject var messageObject: MessageObs
     
-    let model = heart()
+    @StateObject var heartService = HeartService()
+    @StateObject var messageService = MessageService()
+    
     
     @State var age = ""
     @State var sex = ""
@@ -27,8 +28,7 @@ struct MainView: View {
     @State var ca = ""
     @State var thal = ""
     
-    @State var result = ""
-    @State var percentage = ""
+   
     
     
     var body: some View {
@@ -126,16 +126,16 @@ struct MainView: View {
             }
             .padding()
             
-            if !self.result.isEmpty && !self.percentage.isEmpty{
+            if !heartService.result.isEmpty && !heartService.percentage.isEmpty{
 
-             ResultView(result: $result, percentage: $percentage)
+                ResultView(result: $heartService.result, percentage: $heartService.percentage)
                 .padding(.horizontal)
                 
             }
             
             Spacer()
             
-        }.alert(item: $messageObject.msg){ message in
+        }.alert(item: $messageService.msg){ message in
             Alert(title: Text("Warning"), message: Text(message.msg))
         }
         
@@ -149,65 +149,50 @@ struct MainView: View {
            
             
         }catch MessageWarning.sex{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.sex.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.sex.message)
             
         }catch MessageWarning.age{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.age.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.age.message)
             
         }catch MessageWarning.cp{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.cp.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.cp.message)
             
         }catch MessageWarning.trestbps{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.trestbps.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.trestbps.message)
             
         }catch MessageWarning.chol{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.chol.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.chol.message)
             
         }catch MessageWarning.fbs{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.fbs.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.fbs.message)
             
         }catch MessageWarning.restecg{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.restecg.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.restecg.message)
             
         }catch MessageWarning.thalach{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.thalach.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.thalach.message)
             
         }catch MessageWarning.exang{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.exang.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.exang.message)
             
         }catch MessageWarning.oldpeak{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.oldpeak.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.oldpeak.message)
             
         }catch MessageWarning.slope{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.slope.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.slope.message)
             
         }catch MessageWarning.ca{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.ca.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.ca.message)
             
         }catch MessageWarning.thal{
-            self.messageObject.msg = MessageModel(msg: MessageWarning.thal.message)
+            self.messageService.msg = MessageModel(msg: MessageWarning.thal.message)
         }
         
         
     }
     
     
-    func runModel() {
-        
-        guard let marsHabitatPricerOutput = try? model.prediction(age: Double(self.age)!, sex: Double(self.sex)!, cp: Double(self.cp)!, trestbps: Double(self.trestbps)!, chol: Double(self.chol)!, fbs: Double(self.fbs)!, restecg: Double(self.restecg)!, thalach: Double(self.thalach)!, exang: Double(self.exang)!, oldpeak: Double(self.oldpeak)!, slope: Double(self.slope)!, ca: Double(self.ca)!, thal: Double(self.thal)!) else {
-            fatalError("Unexpected runtime error.")
-        
-        }
-        
-        if marsHabitatPricerOutput.target == 1{
-            self.result = "Heart disease"
-            self.percentage = String(format: "%.2f", marsHabitatPricerOutput.targetProbability[1]!) + " %"
-        }else{
-            self.result = "No heart disease"
-            self.percentage = String(format: "%.2f", marsHabitatPricerOutput.targetProbability[0]!) + " %"
-        }
-        
-    }
+  
     
     func validateFields() throws {
         
@@ -255,7 +240,14 @@ struct MainView: View {
             
         }
         else{
-            runModel()
+            
+            do{
+                try heartService.predictHeartDisease(age: self.age, sex: self.sex, cp: self.cp, trestbps: self.trestbps, chol: self.chol, fbs: self.fbs, restecg: self.restecg, thalach: self.thalach, exang: self.exang, oldpeak: self.oldpeak, slope: self.slope, ca: self.ca, thal: self.thal)
+            }catch MessageWarning.errorModel{
+                self.messageService.msg = MessageModel(msg: MessageWarning.errorModel.message)
+
+            }
+            
         }
         
         
@@ -278,8 +270,8 @@ struct MainView: View {
         self.ca = ""
         self.thal = ""
         
-        self.result = ""
-        self.percentage = ""
+        heartService.result = ""
+        heartService.percentage = ""
     }
 }
 
